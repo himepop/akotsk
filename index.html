@@ -3,15 +3,20 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Fandom 3x3 Prompt Bingo</title>
+  <title>Fandom Bingo Club</title>
 
   <style>
     :root {
-      --cream: #f8f2e8;
-      --ink: #111;
-      --green: #5f8f66;
-      --blue: #4f82bd;
-      --soft: #fffaf2;
+      --bg: #ffd978;
+      --cream: #fff5df;
+      --soft: #fffaf0;
+      --ink: #9f3e32;
+      --red: #d94338;
+      --pink: #f5a9ba;
+      --blue: #a9cad4;
+      --yellow: #ffd76d;
+      --green: #8cae7d;
+      --border: #c76a5b;
     }
 
     * { box-sizing: border-box; }
@@ -19,135 +24,164 @@
     body {
       margin: 0;
       min-height: 100vh;
-      background: var(--cream);
+      background: var(--bg);
       color: var(--ink);
       font-family: Arial, Helvetica, sans-serif;
+      padding: 3rem 1rem;
     }
 
-    .page {
-      width: min(1100px, 100%);
-      margin: 0 auto;
-      padding: 4rem 1.5rem;
-    }
-
-    .site-frame {
-      border: 2px solid var(--ink);
-      border-radius: 20px;
-      padding: clamp(1.5rem, 4vw, 3rem);
-      min-height: 80vh;
+    .app {
+      width: min(980px, 100%);
+      margin: auto;
       background: var(--cream);
+      border: 2px solid var(--border);
+      border-radius: 24px;
+      padding: clamp(1rem, 3vw, 2rem);
+      box-shadow: 0 20px 50px rgba(159, 62, 50, 0.18);
     }
 
     .topbar {
       display: flex;
       justify-content: space-between;
       align-items: center;
-      font-size: 0.75rem;
-      margin-bottom: 3rem;
+      margin-bottom: 2rem;
+      font-size: 0.8rem;
     }
 
     .logo {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: var(--pink);
+      display: grid;
+      place-items: center;
       font-weight: 800;
-      letter-spacing: 0.04em;
     }
 
     .nav {
+      background: #ffd3df;
+      border-radius: 999px;
+      padding: 0.35rem;
       display: flex;
-      gap: 1rem;
-      opacity: 0.75;
+      gap: 0.25rem;
+    }
+
+    .nav span {
+      padding: 0.45rem 0.8rem;
+      border-radius: 999px;
+    }
+
+    .nav span:first-child {
+      background: var(--red);
+      color: white;
     }
 
     .hero {
       display: grid;
-      grid-template-columns: 1fr auto;
-      gap: 2rem;
-      align-items: start;
-      margin-bottom: 3rem;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.25rem;
+      margin-bottom: 1.25rem;
+    }
+
+    .hero-card,
+    .panel,
+    .notes-section,
+    .rules-section {
+      background: var(--soft);
+      border-radius: 22px;
+      padding: 1.5rem;
     }
 
     h1 {
+      font-family: Georgia, serif;
+      font-size: clamp(3rem, 8vw, 6rem);
+      line-height: 0.9;
       margin: 0;
-      font-size: clamp(3.4rem, 10vw, 8rem);
-      line-height: 0.88;
-      letter-spacing: -0.08em;
-      font-weight: 400;
+      color: var(--red);
+      font-style: italic;
     }
 
-    .side-note {
-      max-width: 160px;
-      color: var(--green);
-      font-size: 1rem;
-      line-height: 1.15;
-      transform: rotate(-7deg);
-      margin-top: 1.4rem;
-    }
-
-    .intro {
-      max-width: 500px;
-      font-size: 0.95rem;
+    .subtitle {
+      margin-top: 1rem;
+      max-width: 420px;
       line-height: 1.45;
-      margin-top: 1.5rem;
+      font-size: 0.95rem;
     }
 
-    .button-row {
+    .info-card h2 {
+      font-family: Georgia, serif;
+      font-size: 3rem;
+      margin: 0 0 0.5rem;
+      color: var(--red);
+    }
+
+    .info-card p {
+      line-height: 1.45;
+      font-size: 0.95rem;
+    }
+
+    .controls {
       display: flex;
       flex-wrap: wrap;
       gap: 0.7rem;
-      margin: 2rem 0 2.5rem;
+      margin-top: 1.2rem;
     }
 
     button {
-      border: 2px solid var(--ink);
-      background: var(--soft);
+      border: none;
+      border-radius: 999px;
+      background: var(--red);
+      color: white;
       padding: 0.8rem 1.2rem;
-      border-radius: 7px;
       font: inherit;
       cursor: pointer;
       transition: 0.15s ease;
     }
 
     button:hover {
-      background: var(--ink);
-      color: var(--cream);
+      transform: translateY(-2px);
+      filter: brightness(0.95);
     }
 
-    .primary {
-      background: var(--green);
-      color: white;
-      border-color: var(--green);
+    .secondary { background: var(--pink); color: var(--ink); }
+    .blue-btn { background: var(--blue); color: var(--ink); }
+
+    .bingo-banner {
+      background: var(--yellow);
+      border-radius: 22px;
+      padding: 1.25rem 1.5rem;
+      margin: 1.25rem 0;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      align-items: center;
     }
 
-    .primary:hover {
-      background: var(--ink);
-      border-color: var(--ink);
+    .bingo-banner h2 {
+      font-family: Georgia, serif;
+      font-style: italic;
+      font-size: clamp(2rem, 5vw, 3.5rem);
+      margin: 0;
+      color: var(--red);
     }
 
-    .bingo-section,
-    .notes-section,
-    .rules-section {
-      margin-top: 3rem;
-      border-top: 2px solid var(--ink);
-      padding-top: 2rem;
-    }
-
-    .section-label {
-      font-size: 0.8rem;
-      margin-bottom: 1rem;
+    .status {
+      min-height: 1.2rem;
+      font-size: 0.9rem;
       font-weight: 700;
     }
 
     .bingo-grid {
       display: grid;
       grid-template-columns: repeat(3, 1fr);
-      gap: 0.85rem;
-      max-width: 760px;
+      gap: 0.8rem;
     }
 
     .square {
-      min-height: 150px;
-      border: 2px solid var(--ink);
-      border-radius: 8px;
+      min-height: 145px;
       background: var(--soft);
+      border: 2px solid rgba(159, 62, 50, 0.35);
+      border-radius: 18px;
       padding: 1rem;
       display: flex;
       flex-direction: column;
@@ -156,266 +190,259 @@
       transition: 0.15s ease;
     }
 
+    .square:nth-child(odd) { background: #ffd3df; }
+    .square:nth-child(3n) { background: var(--blue); }
+    .square:nth-child(4n) { background: var(--yellow); }
+
     .square:hover {
       transform: translateY(-3px);
     }
 
     .square.done {
-      background: var(--green);
+      background: var(--red);
       color: white;
+      border-color: var(--red);
     }
 
     .category {
       font-size: 0.68rem;
       text-transform: uppercase;
-      letter-spacing: 0.1em;
-      opacity: 0.65;
-      font-weight: 700;
+      letter-spacing: 0.12em;
+      font-weight: 800;
+      opacity: 0.75;
     }
 
     .prompt {
       font-size: 1.05rem;
       line-height: 1.25;
+      font-weight: 700;
     }
 
     .free {
-      background: var(--blue);
+      background: var(--green) !important;
       color: white;
       text-align: center;
       justify-content: center;
     }
 
-    .free .category {
-      display: none;
-    }
+    .free .category { display: none; }
 
-    .status {
-      margin-top: 1rem;
-      min-height: 1.2rem;
-      color: var(--green);
-      font-size: 0.9rem;
+    .notes-section,
+    .rules-section {
+      margin-top: 1.25rem;
     }
 
     .notes-header {
-      display: grid;
-      grid-template-columns: 1fr auto;
+      display: flex;
+      justify-content: space-between;
       gap: 1rem;
       align-items: end;
       margin-bottom: 1rem;
     }
 
-    .notes-section h2,
-    .rules-section h2 {
-      margin: 0 0 0.8rem;
-      font-size: clamp(2rem, 5vw, 4rem);
-      letter-spacing: -0.06em;
-      font-weight: 400;
-    }
-
-    .notes-section p,
-    .rules-section p {
-      margin: 0;
-      line-height: 1.45;
-      font-size: 0.9rem;
-    }
-
-    .notes-buttons {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 0.6rem;
-      justify-content: flex-end;
+    h3 {
+      font-family: Georgia, serif;
+      font-size: 2.3rem;
+      color: var(--red);
+      font-style: italic;
+      margin: 0 0 0.4rem;
     }
 
     textarea {
       width: 100%;
-      min-height: 230px;
+      min-height: 210px;
       resize: vertical;
-      border: 2px solid var(--ink);
-      border-radius: 8px;
-      background: var(--soft);
-      color: var(--ink);
+      border: 2px solid rgba(159, 62, 50, 0.35);
+      border-radius: 18px;
+      background: #fffaf0;
       padding: 1rem;
       font: inherit;
+      color: var(--ink);
       line-height: 1.45;
     }
 
     textarea:focus {
       outline: none;
-      border-color: var(--green);
-    }
-
-    .notes-status {
-      margin-top: 0.8rem;
+      border-color: var(--red);
     }
 
     .rules-grid {
       display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr;
-      gap: 0.85rem;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.8rem;
     }
 
     .rule-card {
-      border: 2px solid var(--ink);
-      border-radius: 8px;
+      background: #fffaf0;
+      border-radius: 18px;
+      border: 2px solid rgba(159, 62, 50, 0.25);
       padding: 1rem;
-      background: var(--soft);
+      line-height: 1.4;
+      font-size: 0.9rem;
     }
 
-    .rule-card strong {
-      display: block;
-      margin-bottom: 0.5rem;
+    .footer {
+      margin-top: 1.25rem;
+      background: var(--red);
+      color: white;
+      border-radius: 22px;
+      padding: 2rem;
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
     }
 
-    .grass {
-      height: 110px;
-      background: var(--green);
-      margin: 4rem -3rem -3rem;
-      border-radius: 0 0 18px 18px;
+    .footer strong {
+      font-family: Georgia, serif;
+      font-size: 3rem;
+      font-style: italic;
     }
 
-    @media (max-width: 720px) {
+    @media (max-width: 760px) {
+      body { padding: 1rem; }
       .hero,
-      .notes-header {
-        grid-template-columns: 1fr;
-      }
-
-      .nav {
-        display: none;
-      }
-
-      .bingo-grid {
-        gap: 0.55rem;
-      }
-
-      .square {
-        min-height: 120px;
-        padding: 0.7rem;
-      }
-
-      .prompt {
-        font-size: 0.82rem;
-      }
-
       .rules-grid {
         grid-template-columns: 1fr;
       }
 
-      .notes-buttons {
-        justify-content: flex-start;
+      .nav { display: none; }
+
+      .notes-header {
+        flex-direction: column;
+        align-items: flex-start;
       }
 
-      .grass {
-        margin-left: -1.5rem;
-        margin-right: -1.5rem;
+      .bingo-grid {
+        gap: 0.5rem;
+      }
+
+      .square {
+        min-height: 115px;
+        padding: 0.7rem;
+      }
+
+      .prompt {
+        font-size: 0.78rem;
       }
     }
   </style>
 </head>
 
 <body>
-  <main class="page">
-    <div class="site-frame">
-      <header class="topbar">
-        <div class="logo">FANDOM BINGO CLUB</div>
-        <nav class="nav">
-          <span>Generate</span>
-          <span>Mark</span>
-          <span>Write</span>
-          <span>Copy</span>
-        </nav>
-      </header>
+  <main class="app">
+    <header class="topbar">
+      <div class="logo">f</div>
+      <nav class="nav">
+        <span>Bingo</span>
+        <span>Notes</span>
+        <span>Rules</span>
+      </nav>
+      <div>Fandom Prompt Club</div>
+    </header>
 
-      <section class="hero">
-        <div>
-          <h1>PLAY.<br>WRITE.<br>YEARN.</h1>
-          <p class="intro">
-            A 3×3 prompt bingo generator for tropes, kinks, genres,
-            angst, fluff, and tiny dialogue lines. Use it for any fic platform,
-            challenge, zine, event, or personal writing game.
-          </p>
+    <section class="hero">
+      <div class="hero-card">
+        <h1>Play.<br>Write.<br>Yearn.</h1>
+        <p class="subtitle">
+          A 3×3 fandom bingo generator for tropes, kinks, genres, angst,
+          fluff, and tiny dialogue lines. Use it for any fic platform,
+          event, zine, or personal writing challenge.
+        </p>
+
+        <div class="controls">
+          <button onclick="generateBingo()">Generate Card</button>
+          <button class="secondary" onclick="copyBingo()">Copy Card</button>
+          <button class="blue-btn" onclick="clearMarks()">Clear Marks</button>
         </div>
-
-        <div class="side-note">
-          a small place for fandom brainrot
-        </div>
-      </section>
-
-      <div class="button-row">
-        <button class="primary" onclick="generateBingo()">Generate 3×3 Card</button>
-        <button onclick="copyBingo()">Copy Card</button>
-        <button onclick="clearMarks()">Clear Marks</button>
       </div>
 
-      <section class="bingo-section">
-        <div class="section-label">Your Prompt Card</div>
-        <div class="bingo-grid" id="bingoGrid"></div>
-        <div class="status" id="status">Click a square to mark it complete.</div>
-      </section>
+      <div class="hero-card info-card">
+        <h2>3×3</h2>
+        <p>
+          Click squares to mark them complete. The center free space starts
+          marked. Complete any row, column, or diagonal for bingo.
+        </p>
+        <p>
+          Save your fic ideas below, copy your card, and keep writing until
+          the brainrot becomes literature.
+        </p>
+      </div>
+    </section>
 
-      <section class="notes-section">
-        <div class="notes-header">
-          <div>
-            <h2>Fic Ideas</h2>
-            <p>Use this space to sketch ships, scenes, titles, summaries, or fill plans.</p>
-          </div>
+    <section class="bingo-banner">
+      <h2>Your Card</h2>
+      <div class="status" id="status">Click a square to mark it complete.</div>
+    </section>
 
-          <div class="notes-buttons">
-            <button onclick="saveNotes()">Save Notes</button>
-            <button onclick="copyNotes()">Copy Notes</button>
-            <button onclick="clearNotes()">Clear Notes</button>
-          </div>
+    <section class="panel">
+      <div class="bingo-grid" id="bingoGrid"></div>
+    </section>
+
+    <section class="notes-section">
+      <div class="notes-header">
+        <div>
+          <h3>Fic Ideas</h3>
+          <p>Sketch ships, scenes, titles, summaries, tags, or fill plans.</p>
         </div>
 
-        <textarea
-          id="ficNotes"
-          placeholder="Example:
-Ship:
+        <div class="controls">
+          <button onclick="saveNotes()">Save Notes</button>
+          <button class="secondary" onclick="copyNotes()">Copy Notes</button>
+          <button class="blue-btn" onclick="clearNotes()">Clear Notes</button>
+        </div>
+      </div>
+
+      <textarea id="ficNotes" placeholder="Ship:
 Square:
 Idea:
 Opening line:
 Tags:
-Notes:"
-        ></textarea>
+Notes:"></textarea>
 
-        <div class="status notes-status" id="notesStatus"></div>
-      </section>
+      <div class="status" id="notesStatus"></div>
+    </section>
 
-      <section class="rules-section">
-        <div class="rules-grid">
-          <div>
-            <h2>Rules</h2>
-            <p>Generate a 3×3 card, pick a ship or fandom, and write one fic per square.</p>
-          </div>
+    <section class="rules-section">
+      <h3>Rules</h3>
 
-          <div class="rule-card">
-            <strong>1. Free Space</strong>
-            <p>The center square is already complete. Use it as a wildcard, author’s choice, or bonus fill.</p>
-          </div>
-
-          <div class="rule-card">
-            <strong>2. One Line Bingo</strong>
-            <p>Complete any row, column, or diagonal to get bingo.</p>
-          </div>
-
-          <div class="rule-card">
-            <strong>3. Full Card</strong>
-            <p>Complete all nine squares for full bingo.</p>
-          </div>
-
-          <div class="rule-card">
-            <strong>4. Mixing Prompts</strong>
-            <p>You can combine multiple squares in one fic, or write a separate fic for each square.</p>
-          </div>
-
-          <div class="rule-card">
-            <strong>5. Tag Kindly</strong>
-            <p>Use appropriate tags, ratings, warnings, and author notes wherever you post.</p>
-          </div>
+      <div class="rules-grid">
+        <div class="rule-card">
+          <strong>Free Space</strong>
+          <p>The center square is already complete. Use it as a wildcard or bonus fill.</p>
         </div>
-      </section>
 
-      <div class="grass"></div>
-    </div>
+        <div class="rule-card">
+          <strong>One Line Bingo</strong>
+          <p>Complete any row, column, or diagonal to get bingo.</p>
+        </div>
+
+        <div class="rule-card">
+          <strong>Full Card</strong>
+          <p>Complete all nine squares for full bingo.</p>
+        </div>
+
+        <div class="rule-card">
+          <strong>Mix Prompts</strong>
+          <p>You can combine multiple squares in one fic or write separate fills.</p>
+        </div>
+
+        <div class="rule-card">
+          <strong>Tag Kindly</strong>
+          <p>Use appropriate tags, ratings, warnings, and notes wherever you post.</p>
+        </div>
+
+        <div class="rule-card">
+          <strong>Have Fun</strong>
+          <p>Change any prompt that does not fit your fandom, ship, or comfort level.</p>
+        </div>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <strong>Fandom Bingo</strong>
+      <span>made for prompts, yearning, and unfinished drafts</span>
+    </footer>
   </main>
 
   <script>
@@ -509,14 +536,13 @@ Notes:"
       const pool = makePool();
 
       currentCard = pool.slice(0, 8);
-
       currentCard.splice(4, 0, {
         category: "free",
         text: "FREE SPACE"
       });
 
       renderBingo();
-      setStatus("New 3×3 card generated. Free space is already marked.");
+      setStatus("New card generated. Free space is already marked.");
     }
 
     function renderBingo() {
@@ -573,11 +599,11 @@ Notes:"
       const allDone = done.every(Boolean);
 
       if (allDone) {
-        setStatus("FULL BINGO! Catastrophic fandom achievement unlocked.");
+        setStatus("FULL BINGO! Fandom achievement unlocked.");
       } else if (completedLines.length > 0) {
-        setStatus("BINGO LINE! One row of brainrot complete.");
+        setStatus("BINGO LINE! One row complete.");
       } else {
-        setStatus("Keep going — the fic gremlins believe in you.");
+        setStatus("Keep going — your fic idea is cooking.");
       }
     }
 
@@ -595,7 +621,7 @@ Notes:"
         await navigator.clipboard.writeText(text);
         setStatus("Card copied to clipboard.");
       } catch {
-        setStatus("Copy failed. Select the card manually.");
+        setStatus("Copy failed. Select manually.");
       }
     }
 
@@ -615,41 +641,34 @@ Notes:"
 
     function saveNotes() {
       localStorage.setItem("fandomBingoNotes", ficNotes.value);
-      setNotesStatus("Notes saved in this browser.");
+      notesStatus.textContent = "Notes saved in this browser.";
     }
 
     async function copyNotes() {
       const notes = ficNotes.value.trim();
 
       if (!notes) {
-        setNotesStatus("Write some notes first.");
+        notesStatus.textContent = "Write some notes first.";
         return;
       }
 
       try {
         await navigator.clipboard.writeText(notes);
-        setNotesStatus("Notes copied to clipboard.");
+        notesStatus.textContent = "Notes copied to clipboard.";
       } catch {
-        setNotesStatus("Copy failed. Select the notes manually.");
+        notesStatus.textContent = "Copy failed. Select manually.";
       }
     }
 
     function clearNotes() {
       ficNotes.value = "";
       localStorage.removeItem("fandomBingoNotes");
-      setNotesStatus("Notes cleared.");
+      notesStatus.textContent = "Notes cleared.";
     }
 
     function loadNotes() {
       const savedNotes = localStorage.getItem("fandomBingoNotes");
-
-      if (savedNotes) {
-        ficNotes.value = savedNotes;
-      }
-    }
-
-    function setNotesStatus(message) {
-      notesStatus.textContent = message;
+      if (savedNotes) ficNotes.value = savedNotes;
     }
 
     generateBingo();
