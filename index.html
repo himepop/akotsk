@@ -194,9 +194,7 @@
     .square:nth-child(3n) { background: var(--blue); }
     .square:nth-child(4n) { background: var(--yellow); }
 
-    .square:hover {
-      transform: translateY(-3px);
-    }
+    .square:hover { transform: translateY(-3px); }
 
     .square.done {
       background: var(--red);
@@ -301,6 +299,7 @@
 
     @media (max-width: 760px) {
       body { padding: 1rem; }
+
       .hero,
       .rules-grid {
         grid-template-columns: 1fr;
@@ -313,18 +312,14 @@
         align-items: flex-start;
       }
 
-      .bingo-grid {
-        gap: 0.5rem;
-      }
+      .bingo-grid { gap: 0.5rem; }
 
       .square {
         min-height: 115px;
         padding: 0.7rem;
       }
 
-      .prompt {
-        font-size: 0.78rem;
-      }
+      .prompt { font-size: 0.78rem; }
     }
   </style>
 </head>
@@ -336,7 +331,7 @@
       <nav class="nav">
         <span>Bingo</span>
         <span>Notes</span>
-        <span>Rules</span>
+        <span>Play</span>
       </nav>
       <div>Fandom Prompt Club</div>
     </header>
@@ -353,6 +348,7 @@
         <div class="controls">
           <button onclick="generateBingo()">Generate Card</button>
           <button class="secondary" onclick="copyBingo()">Copy Card</button>
+          <button class="blue-btn" onclick="downloadBingoCSV()">Download CSV</button>
           <button class="blue-btn" onclick="clearMarks()">Clear Marks</button>
         </div>
       </div>
@@ -364,8 +360,8 @@
           marked. Complete any row, column, or diagonal for bingo.
         </p>
         <p>
-          Save your fic ideas below, copy your card, and keep writing until
-          the brainrot becomes literature.
+          Save your fic ideas below, copy your card, or download it as a CSV
+          file with visible rows and columns.
         </p>
       </div>
     </section>
@@ -404,37 +400,37 @@ Notes:"></textarea>
     </section>
 
     <section class="rules-section">
-      <h3>Rules</h3>
+      <h3>How to Play</h3>
 
       <div class="rules-grid">
         <div class="rule-card">
-          <strong>Free Space</strong>
-          <p>The center square is already complete. Use it as a wildcard or bonus fill.</p>
+          <strong>1. Generate</strong>
+          <p>Click “Generate Card” to create a new 3×3 fandom bingo card.</p>
         </div>
 
         <div class="rule-card">
-          <strong>One Line Bingo</strong>
-          <p>Complete any row, column, or diagonal to get bingo.</p>
+          <strong>2. Choose a Fill</strong>
+          <p>Pick a square and write a fic, drabble, scene, outline, or idea based on that prompt.</p>
         </div>
 
         <div class="rule-card">
-          <strong>Full Card</strong>
-          <p>Complete all nine squares for full bingo.</p>
+          <strong>3. Mark Squares</strong>
+          <p>Click a square when you finish it. The center free space starts marked.</p>
         </div>
 
         <div class="rule-card">
-          <strong>Mix Prompts</strong>
-          <p>You can combine multiple squares in one fic or write separate fills.</p>
+          <strong>4. Get Bingo</strong>
+          <p>Complete any row, column, or diagonal to get one-line bingo.</p>
         </div>
 
         <div class="rule-card">
-          <strong>Tag Kindly</strong>
-          <p>Use appropriate tags, ratings, warnings, and notes wherever you post.</p>
+          <strong>5. Full Card</strong>
+          <p>Complete all nine squares for a full bingo challenge.</p>
         </div>
 
         <div class="rule-card">
-          <strong>Have Fun</strong>
-          <p>Change any prompt that does not fit your fandom, ship, or comfort level.</p>
+          <strong>6. Save Your Work</strong>
+          <p>Use the notes box to plan fic ideas, then save, copy, or download your card.</p>
         </div>
       </div>
     </section>
@@ -456,7 +452,6 @@ Notes:"></textarea>
         "second chance romance", "slow burn", "idiots in love", "forced proximity",
         "secret relationship"
       ],
-
       fluff: [
         "sleepy cuddles", "forehead kisses", "sharing tea at midnight",
         "fixing someone’s tie", "dancing in the kitchen", "surprise flowers",
@@ -466,7 +461,6 @@ Notes:"></textarea>
         "bookstore date", "blanket fort", "late-night snacks", "sharing dessert",
         "gentle hair brushing", "quiet companionship"
       ],
-
       angst: [
         "betrayal", "unresolved grief", "I thought you were dead",
         "one-sided love", "emotional repression", "almost confession",
@@ -477,7 +471,6 @@ Notes:"></textarea>
         "nightmare aftermath", "fear of abandonment", "trust broken",
         "bittersweet ending"
       ],
-
       kink: [
         "praise kink", "degradation kink", "bondage", "blindfolds",
         "collaring", "marking", "biting", "overstimulation", "edging",
@@ -486,7 +479,6 @@ Notes:"></textarea>
         "service kink", "obedience", "begging", "possessiveness",
         "jealousy kink", "dirty talk", "aftercare", "dom/sub dynamics"
       ],
-
       dialogue: [
         "“don’t look at me like that.”", "“you came back.”",
         "“this is a terrible idea.”", "“you’re shaking.”",
@@ -497,7 +489,6 @@ Notes:"></textarea>
         "“you’re impossible.”", "“you’re not alone anymore.”",
         "“I know you’re lying.”"
       ],
-
       genre: [
         "gothic romance", "space opera", "cozy fantasy", "cyberpunk",
         "horror comedy", "dark academia", "post-apocalyptic",
@@ -566,7 +557,6 @@ Notes:"></textarea>
           if (item.category !== "free") {
             square.classList.toggle("done");
           }
-
           checkBingoProgress();
         });
 
@@ -623,6 +613,38 @@ Notes:"></textarea>
       } catch {
         setStatus("Copy failed. Select manually.");
       }
+    }
+
+    function downloadBingoCSV() {
+      if (!currentCard.length) {
+        setStatus("Generate a card first.");
+        return;
+      }
+
+      const rows = [
+        currentCard.slice(0, 3),
+        currentCard.slice(3, 6),
+        currentCard.slice(6, 9)
+      ];
+
+      const csv = rows
+        .map(row =>
+          row
+            .map(item => `"${item.text.replace(/"/g, '""')}"`)
+            .join(",")
+        )
+        .join("\n");
+
+      const blob = new Blob([csv], { type: "text/csv;charset=utf-8;" });
+      const url = URL.createObjectURL(blob);
+
+      const link = document.createElement("a");
+      link.href = url;
+      link.download = "fandom-bingo-card.csv";
+      link.click();
+
+      URL.revokeObjectURL(url);
+      setStatus("Bingo card downloaded as CSV.");
     }
 
     function clearMarks() {
