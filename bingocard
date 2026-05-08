@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AO3 3x3 Prompt Bingo</title>
+
+  <style>
+    :root {
+      --cream: #f8f2e8;
+      --ink: #111;
+      --green: #5f8f66;
+      --blue: #4f82bd;
+      --soft: #fffaf2;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      background: var(--cream);
+      color: var(--ink);
+      font-family: Arial, Helvetica, sans-serif;
+    }
+
+    .page {
+      width: min(1100px, 100%);
+      margin: 0 auto;
+      padding: 4rem 1.5rem;
+    }
+
+    .site-frame {
+      border: 2px solid var(--ink);
+      border-radius: 20px;
+      padding: clamp(1.5rem, 4vw, 3rem);
+      min-height: 80vh;
+      background: var(--cream);
+    }
+
+    .topbar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.75rem;
+      margin-bottom: 3rem;
+    }
+
+    .logo {
+      font-weight: 800;
+      letter-spacing: 0.04em;
+    }
+
+    .nav {
+      display: flex;
+      gap: 1rem;
+      opacity: 0.75;
+    }
+
+    .hero {
+      display: grid;
+      grid-template-columns: 1fr auto;
+      gap: 2rem;
+      align-items: start;
+      margin-bottom: 3rem;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: clamp(3.4rem, 10vw, 8rem);
+      line-height: 0.88;
+      letter-spacing: -0.08em;
+      font-weight: 400;
+    }
+
+    .side-note {
+      max-width: 160px;
+      color: var(--green);
+      font-size: 1rem;
+      line-height: 1.15;
+      transform: rotate(-7deg);
+      margin-top: 1.4rem;
+    }
+
+    .intro {
+      max-width: 430px;
+      font-size: 0.95rem;
+      line-height: 1.45;
+      margin-top: 1.5rem;
+    }
+
+    .button-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.7rem;
+      margin: 2rem 0 2.5rem;
+    }
+
+    button {
+      border: 2px solid var(--ink);
+      background: var(--soft);
+      padding: 0.8rem 1.2rem;
+      border-radius: 7px;
+      font: inherit;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    button:hover {
+      background: var(--ink);
+      color: var(--cream);
+    }
+
+    .primary {
+      background: var(--green);
+      color: white;
+      border-color: var(--green);
+    }
+
+    .primary:hover {
+      background: var(--ink);
+      border-color: var(--ink);
+    }
+
+    .bingo-section {
+      margin-top: 2rem;
+    }
+
+    .section-label {
+      font-size: 0.8rem;
+      margin-bottom: 1rem;
+      font-weight: 700;
+    }
+
+    .bingo-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 0.85rem;
+      max-width: 760px;
+    }
+
+    .square {
+      min-height: 150px;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: var(--soft);
+      padding: 1rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: 0.15s ease;
+    }
+
+    .square:hover {
+      transform: translateY(-3px);
+    }
+
+    .square.done {
+      background: var(--green);
+      color: white;
+    }
+
+    .category {
+      font-size: 0.68rem;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      opacity: 0.65;
+      font-weight: 700;
+    }
+
+    .prompt {
+      font-size: 1.05rem;
+      line-height: 1.25;
+    }
+
+    .free {
+      background: var(--blue);
+      color: white;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .free .category {
+      display: none;
+    }
+
+    .status {
+      margin-top: 1rem;
+      min-height: 1.2rem;
+      color: var(--green);
+      font-size: 0.9rem;
+    }
+
+    .rules-section {
+      margin-top: 3rem;
+      border-top: 2px solid var(--ink);
+      padding-top: 2rem;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 0.85rem;
+    }
+
+    .rules-section h2 {
+      margin: 0 0 0.8rem;
+      font-size: clamp(2rem, 5vw, 4rem);
+      letter-spacing: -0.06em;
+      font-weight: 400;
+    }
+
+    .rules-section p {
+      margin: 0;
+      line-height: 1.45;
+      font-size: 0.9rem;
+    }
+
+    .rule-card {
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      padding: 1rem;
+      background: var(--soft);
+    }
+
+    .rule-card strong {
+      display: block;
+      margin-bottom: 0.5rem;
+    }
+
+    .grass {
+      height: 110px;
+      background: var(--green);
+      margin: 4rem -3rem -3rem;
+      border-radius: 0 0 18px 18px;
+    }
+
+    @media (max-width: 720px) {
+      .hero {
+        grid-template-columns: 1fr;
+      }
+
+      .nav {
+        display: none;
+      }
+
+      .bingo-grid {
+        gap: 0.55rem;
+      }
+
+      .square {
+        min-height: 120px;
+        padding: 0.7rem;
+      }
+
+      .prompt {
+        font-size: 0.82rem;
+      }
+
+      .rules-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .grass {
+        margin-left: -1.5rem;
+        margin-right: -1.5rem;
+      }
+    }
+  </style>
+</head>
+
+<body>
+  <main class="page">
+    <div class="site-frame">
+      <header class="topbar">
+        <div class="logo">AO3 BINGO CLUB</div>
+        <nav class="nav">
+          <span>Generate</span>
+          <span>Mark</span>
+          <span>Copy</span>
+        </nav>
+      </header>
+
+      <section class="hero">
+        <div>
+          <h1>PLAY.<br>WRITE.<br>YEARN.</h1>
+          <p class="intro">
+            A 3×3 prompt bingo generator for tropes, kinks, genres,
+            angst, fluff, and tiny dialogue lines.
+          </p>
+        </div>
+
+        <div class="side-note">
+          a small place for fandom brainrot
+        </div>
+      </section>
+
+      <div class="button-row">
+        <button class="primary" onclick="generateBingo()">Generate 3×3 Card</button>
+        <button onclick="copyBingo()">Copy Card</button>
+        <button onclick="clearMarks()">Clear Marks</button>
+      </div>
+
+      <section class="bingo-section">
+        <div class="section-label">Your Prompt Card</div>
+        <div class="bingo-grid" id="bingoGrid"></div>
+        <div class="status" id="status">Click a square to mark it complete.</div>
+      </section>
+
+      <section class="rules-section">
+        <div class="rules-grid">
+          <div>
+            <h2>Rules</h2>
+            <p>Generate a 3×3 card, pick a ship or fandom, and write one fic per square.</p>
+          </div>
+
+          <div class="rule-card">
+            <strong>1. Free Space</strong>
+            <p>The center square is already complete. Use it as a wildcard, author’s choice, or bonus fill.</p>
+          </div>
+
+          <div class="rule-card">
+            <strong>2. One Line Bingo</strong>
+            <p>Complete any row, column, or diagonal to get bingo.</p>
+          </div>
+
+          <div class="rule-card">
+            <strong>3. Full Card</strong>
+            <p>Complete all nine squares for full bingo.</p>
+          </div>
+
+          <div class="rule-card">
+            <strong>4. Mixing Prompts</strong>
+            <p>You can combine multiple squares in one fic, or write a separate fic for each square.</p>
+          </div>
+
+          <div class="rule-card">
+            <strong>5. Tag Kindly</strong>
+            <p>Use appropriate AO3 tags, ratings, warnings, and author notes for each fill.</p>
+          </div>
+        </div>
+      </section>
+
+      <div class="grass"></div>
+    </div>
+  </main>
+
+  <script>
+    const promptDB = {
+      trope: [
+        "only one bed", "fake dating", "enemies to lovers", "friends to lovers",
+        "rivals to lovers", "soulmates AU", "secret identity", "mutual pining",
+        "accidental marriage", "arranged marriage", "time loop", "body swap",
+        "found family", "hurt/comfort", "amnesia", "marriage of convenience",
+        "road trip", "roommates AU", "apocalypse survival", "forbidden romance",
+        "second chance romance", "slow burn", "idiots in love", "forced proximity",
+        "secret relationship"
+      ],
+
+      fluff: [
+        "sleepy cuddles", "forehead kisses", "sharing tea at midnight",
+        "fixing someone’s tie", "dancing in the kitchen", "surprise flowers",
+        "carrying them to bed", "warm blankets during a storm",
+        "morning coffee ritual", "handwritten notes", "matching pajamas",
+        "sharing headphones", "watching the sunrise", "picnic date",
+        "bookstore date", "blanket fort", "late-night snacks", "sharing dessert",
+        "gentle hair brushing", "quiet companionship"
+      ],
+
+      angst: [
+        "betrayal", "unresolved grief", "I thought you were dead",
+        "one-sided love", "emotional repression", "almost confession",
+        "panic attack comfort", "self-sacrifice", "jealousy spiral",
+        "reunion after years apart", "choosing duty over love",
+        "dangerous secret", "they leave without saying goodbye",
+        "love confession too late", "survivor’s guilt", "hidden injury",
+        "nightmare aftermath", "fear of abandonment", "trust broken",
+        "bittersweet ending"
+      ],
+
+      kink: [
+        "praise kink", "degradation kink", "bondage", "blindfolds",
+        "collaring", "marking", "biting", "overstimulation", "edging",
+        "orgasm denial", "body worship", "hand kink", "voice kink",
+        "size kink", "uniform kink", "authority kink", "power imbalance",
+        "service kink", "obedience", "begging", "possessiveness",
+        "jealousy kink", "dirty talk", "aftercare", "dom/sub dynamics"
+      ],
+
+      dialogue: [
+        "“don’t look at me like that.”", "“you came back.”",
+        "“this is a terrible idea.”", "“you’re shaking.”",
+        "“tell me to stop.”", "“I hate how much I missed you.”",
+        "“you remembered.”", "“don’t fall asleep yet.”",
+        "“you don’t have to pretend with me.”", "“if we survive this—”",
+        "“say it again.”", "“I thought I lost you.”",
+        "“you’re impossible.”", "“you’re not alone anymore.”",
+        "“I know you’re lying.”"
+      ],
+
+      genre: [
+        "gothic romance", "space opera", "cozy fantasy", "cyberpunk",
+        "horror comedy", "dark academia", "post-apocalyptic",
+        "magical realism", "urban fantasy", "slice of life",
+        "supernatural mystery", "tragic romance", "romantic comedy",
+        "high fantasy", "fairy tale horror", "noir detective story",
+        "pirate adventure", "royal court drama", "haunted house story",
+        "dreamlike surrealism"
+      ]
+    };
+
+    const bingoGrid = document.getElementById("bingoGrid");
+    const statusText = document.getElementById("status");
+    let currentCard = [];
+
+    function shuffle(array) {
+      return [...array].sort(() => Math.random() - 0.5);
+    }
+
+    function makePool() {
+      const pool = [];
+
+      Object.keys(promptDB).forEach(category => {
+        promptDB[category].forEach(text => {
+          pool.push({ category, text });
+        });
+      });
+
+      return shuffle(pool);
+    }
+
+    function generateBingo() {
+      const pool = makePool();
+
+      currentCard = pool.slice(0, 8);
+
+      currentCard.splice(4, 0, {
+        category: "free",
+        text: "FREE SPACE"
+      });
+
+      renderBingo();
+      setStatus("New 3×3 card generated. Free space is already marked.");
+    }
+
+    function renderBingo() {
+      bingoGrid.innerHTML = "";
+
+      currentCard.forEach((item, index) => {
+        const square = document.createElement("div");
+        square.className = "square";
+        square.dataset.index = index;
+
+        if (item.category === "free") {
+          square.classList.add("free", "done");
+        }
+
+        square.innerHTML = `
+          <div class="category">${item.category}</div>
+          <div class="prompt">${item.text}</div>
+        `;
+
+        square.addEventListener("click", () => {
+          if (item.category !== "free") {
+            square.classList.toggle("done");
+          }
+
+          checkBingoProgress();
+        });
+
+        bingoGrid.appendChild(square);
+      });
+
+      checkBingoProgress();
+    }
+
+    function checkBingoProgress() {
+      const done = [...document.querySelectorAll(".square")].map(square =>
+        square.classList.contains("done")
+      );
+
+      const lines = [
+        [0, 1, 2],
+        [3, 4, 5],
+        [6, 7, 8],
+        [0, 3, 6],
+        [1, 4, 7],
+        [2, 5, 8],
+        [0, 4, 8],
+        [2, 4, 6]
+      ];
+
+      const completedLines = lines.filter(line =>
+        line.every(index => done[index])
+      );
+
+      const allDone = done.every(Boolean);
+
+      if (allDone) {
+        setStatus("FULL BINGO! Catastrophic fandom achievement unlocked.");
+      } else if (completedLines.length > 0) {
+        setStatus("BINGO LINE! One row of brainrot complete.");
+      } else {
+        setStatus("Keep going — the fic gremlins believe in you.");
+      }
+    }
+
+    async function copyBingo() {
+      if (!currentCard.length) {
+        setStatus("Generate a card first.");
+        return;
+      }
+
+      const text = currentCard
+        .map((item, index) => `${index + 1}. [${item.category.toUpperCase()}] ${item.text}`)
+        .join("\n");
+
+      try {
+        await navigator.clipboard.writeText(text);
+        setStatus("Card copied to clipboard.");
+      } catch {
+        setStatus("Copy failed. Select the card manually.");
+      }
+    }
+
+    function clearMarks() {
+      document.querySelectorAll(".square.done").forEach(square => {
+        if (!square.classList.contains("free")) {
+          square.classList.remove("done");
+        }
+      });
+
+      checkBingoProgress();
+    }
+
+    function setStatus(message) {
+      statusText.textContent = message;
+    }
+
+    generateBingo();
+  </script>
+</body>
+</html>
