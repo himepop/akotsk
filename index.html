@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>AO3 3x3 Prompt Bingo</title>
+  <title>Fandom 3x3 Prompt Bingo</title>
 
   <style>
     :root {
@@ -83,7 +83,7 @@
     }
 
     .intro {
-      max-width: 430px;
+      max-width: 500px;
       font-size: 0.95rem;
       line-height: 1.45;
       margin-top: 1.5rem;
@@ -122,8 +122,12 @@
       border-color: var(--ink);
     }
 
-    .bingo-section {
-      margin-top: 2rem;
+    .bingo-section,
+    .notes-section,
+    .rules-section {
+      margin-top: 3rem;
+      border-top: 2px solid var(--ink);
+      padding-top: 2rem;
     }
 
     .section-label {
@@ -192,18 +196,15 @@
       font-size: 0.9rem;
     }
 
-    .rules-section {
-      margin-top: 3rem;
-      border-top: 2px solid var(--ink);
-      padding-top: 2rem;
-    }
-
-    .rules-grid {
+    .notes-header {
       display: grid;
-      grid-template-columns: 1.2fr 1fr 1fr;
-      gap: 0.85rem;
+      grid-template-columns: 1fr auto;
+      gap: 1rem;
+      align-items: end;
+      margin-bottom: 1rem;
     }
 
+    .notes-section h2,
     .rules-section h2 {
       margin: 0 0 0.8rem;
       font-size: clamp(2rem, 5vw, 4rem);
@@ -211,10 +212,46 @@
       font-weight: 400;
     }
 
+    .notes-section p,
     .rules-section p {
       margin: 0;
       line-height: 1.45;
       font-size: 0.9rem;
+    }
+
+    .notes-buttons {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      justify-content: flex-end;
+    }
+
+    textarea {
+      width: 100%;
+      min-height: 230px;
+      resize: vertical;
+      border: 2px solid var(--ink);
+      border-radius: 8px;
+      background: var(--soft);
+      color: var(--ink);
+      padding: 1rem;
+      font: inherit;
+      line-height: 1.45;
+    }
+
+    textarea:focus {
+      outline: none;
+      border-color: var(--green);
+    }
+
+    .notes-status {
+      margin-top: 0.8rem;
+    }
+
+    .rules-grid {
+      display: grid;
+      grid-template-columns: 1.2fr 1fr 1fr;
+      gap: 0.85rem;
     }
 
     .rule-card {
@@ -237,7 +274,8 @@
     }
 
     @media (max-width: 720px) {
-      .hero {
+      .hero,
+      .notes-header {
         grid-template-columns: 1fr;
       }
 
@@ -262,6 +300,10 @@
         grid-template-columns: 1fr;
       }
 
+      .notes-buttons {
+        justify-content: flex-start;
+      }
+
       .grass {
         margin-left: -1.5rem;
         margin-right: -1.5rem;
@@ -274,10 +316,11 @@
   <main class="page">
     <div class="site-frame">
       <header class="topbar">
-        <div class="logo">AO3 BINGO CLUB</div>
+        <div class="logo">FANDOM BINGO CLUB</div>
         <nav class="nav">
           <span>Generate</span>
           <span>Mark</span>
+          <span>Write</span>
           <span>Copy</span>
         </nav>
       </header>
@@ -287,7 +330,8 @@
           <h1>PLAY.<br>WRITE.<br>YEARN.</h1>
           <p class="intro">
             A 3×3 prompt bingo generator for tropes, kinks, genres,
-            angst, fluff, and tiny dialogue lines.
+            angst, fluff, and tiny dialogue lines. Use it for any fic platform,
+            challenge, zine, event, or personal writing game.
           </p>
         </div>
 
@@ -306,6 +350,34 @@
         <div class="section-label">Your Prompt Card</div>
         <div class="bingo-grid" id="bingoGrid"></div>
         <div class="status" id="status">Click a square to mark it complete.</div>
+      </section>
+
+      <section class="notes-section">
+        <div class="notes-header">
+          <div>
+            <h2>Fic Ideas</h2>
+            <p>Use this space to sketch ships, scenes, titles, summaries, or fill plans.</p>
+          </div>
+
+          <div class="notes-buttons">
+            <button onclick="saveNotes()">Save Notes</button>
+            <button onclick="copyNotes()">Copy Notes</button>
+            <button onclick="clearNotes()">Clear Notes</button>
+          </div>
+        </div>
+
+        <textarea
+          id="ficNotes"
+          placeholder="Example:
+Ship:
+Square:
+Idea:
+Opening line:
+Tags:
+Notes:"
+        ></textarea>
+
+        <div class="status notes-status" id="notesStatus"></div>
       </section>
 
       <section class="rules-section">
@@ -337,7 +409,7 @@
 
           <div class="rule-card">
             <strong>5. Tag Kindly</strong>
-            <p>Use appropriate AO3 tags, ratings, warnings, and author notes for each fill.</p>
+            <p>Use appropriate tags, ratings, warnings, and author notes wherever you post.</p>
           </div>
         </div>
       </section>
@@ -412,6 +484,9 @@
 
     const bingoGrid = document.getElementById("bingoGrid");
     const statusText = document.getElementById("status");
+    const ficNotes = document.getElementById("ficNotes");
+    const notesStatus = document.getElementById("notesStatus");
+
     let currentCard = [];
 
     function shuffle(array) {
@@ -538,7 +613,47 @@
       statusText.textContent = message;
     }
 
+    function saveNotes() {
+      localStorage.setItem("fandomBingoNotes", ficNotes.value);
+      setNotesStatus("Notes saved in this browser.");
+    }
+
+    async function copyNotes() {
+      const notes = ficNotes.value.trim();
+
+      if (!notes) {
+        setNotesStatus("Write some notes first.");
+        return;
+      }
+
+      try {
+        await navigator.clipboard.writeText(notes);
+        setNotesStatus("Notes copied to clipboard.");
+      } catch {
+        setNotesStatus("Copy failed. Select the notes manually.");
+      }
+    }
+
+    function clearNotes() {
+      ficNotes.value = "";
+      localStorage.removeItem("fandomBingoNotes");
+      setNotesStatus("Notes cleared.");
+    }
+
+    function loadNotes() {
+      const savedNotes = localStorage.getItem("fandomBingoNotes");
+
+      if (savedNotes) {
+        ficNotes.value = savedNotes;
+      }
+    }
+
+    function setNotesStatus(message) {
+      notesStatus.textContent = message;
+    }
+
     generateBingo();
+    loadNotes();
   </script>
 </body>
 </html>
